@@ -1,0 +1,47 @@
+"""
+config.py — 프로젝트 전역 경로 및 설정
+모든 파일에서 이 파일을 임포트하여 경로를 참조합니다.
+하드코딩된 경로를 쓰지 마세요.
+"""
+from pathlib import Path
+
+# ── 루트 ──────────────────────────────────────
+ROOT = Path(__file__).parent.resolve()
+
+# ── 데이터 ────────────────────────────────────
+DATA_DIR        = ROOT / "data"
+RAW_IMAGES_DIR  = DATA_DIR / "raw" / "images"
+RAW_LABELS_DIR  = DATA_DIR / "raw" / "labels"
+TRAIN_DIR       = DATA_DIR / "processed" / "train"
+VAL_DIR         = DATA_DIR / "processed" / "val"
+TEST_DIR        = DATA_DIR / "processed" / "test"
+
+# ── 모델 ──────────────────────────────────────
+MODELS_DIR      = ROOT / "models"
+CHECKPOINT_DIR  = MODELS_DIR / "checkpoints"
+BEST_MODEL_PATH = CHECKPOINT_DIR / "best.pt"
+LAST_MODEL_PATH = CHECKPOINT_DIR / "last.pt"
+DATASET_YAML    = MODELS_DIR / "configs" / "dataset.yaml"
+MODEL_YAML      = MODELS_DIR / "configs" / "model.yaml"
+
+# ── 에셋 ──────────────────────────────────────
+ASSETS_DIR      = ROOT / "assets"
+WARNING_SOUND   = ASSETS_DIR / "sounds" / "warning.mp3"
+TEST_IMAGES_DIR = ASSETS_DIR / "test_images"
+
+# ── 탐지 설정 ─────────────────────────────────
+CONFIDENCE_THRESHOLD = 0.5
+IOU_THRESHOLD        = 0.45
+IMG_SIZE             = 640
+
+# ── 클래스 라벨 ───────────────────────────────
+CLASS_NAMES = [
+    "점자블록",
+    "킥보드",
+    "자전거",
+    "볼라드",
+    "보도블록_파손",
+]
+
+HIGH_RISK_CLASSES = {"킥보드", "자전거", "볼라드"}
+MID_RISK_CLASSES  = {"점자블록", "보도블록_파손"}

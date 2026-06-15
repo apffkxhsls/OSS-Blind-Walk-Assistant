@@ -1,0 +1,15 @@
+# 나중에 만든 파일으로 교체
+
+path: data/processed
+train: train/images
+val:   val/images
+test:  test/images
+
+nc: 5
+
+names:
+  0: 점자블록
+  1: 킥보드
+  2: 자전거
+  3: 볼라드
+  4: 보도블록_파손

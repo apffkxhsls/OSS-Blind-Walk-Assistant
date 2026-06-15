@@ -1,17 +1,11 @@
-# 가상환경 폴더 제외
-.venv/
-venv/
-ENV/
-
-# 파이썬 컴파일 파일 제외
+models/checkpoints/*.pt
+models/checkpoints/*.weights
+data/raw/
+data/processed/
+.env
 __pycache__/
-*.pyc
-
-# 스트림릿 설정 파일 제외
-.streamlit/
-
-# 데이터셋 및 대용량 YOLO 학습 결과 제외 (나중에 로컬에서만 돌릴 것)
-datasets/
+*.py[cod]
+.venv/
+temp_voice.mp3
 runs/
-*.pt
-*.mp4
+.DS_Store
