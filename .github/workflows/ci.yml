@@ -22,7 +22,7 @@ jobs:
     # 4. requirements.txt에 적힌 패키지들이 잘 설치되는지 검사
     - name: Install Dependencies
       run: |
-        python -m pip upgrade pip
+        python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     # 5. [핵심] 파이썬 코드들에 치명적인 문법 에러(Syntax Error)가 없는지 검사
