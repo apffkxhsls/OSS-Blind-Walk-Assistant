@@ -1,0 +1,33 @@
+name: Python Code Error Check Bot 🤖
+
+# 1. 언제 봇이 작동할지 정의 (메인 브랜치로 PR이 올 때마다 발동)
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # 가상의 리눅스 컴퓨터를 한 대 빌립니다.
+
+    steps:
+    # 2. 깃허브에 올라온 예지님 팀의 코드를 다운받음
+    - uses: actions/checkout@v4
+
+    # 3. 파이썬 환경 구축
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
+
+    # 4. requirements.txt에 적힌 패키지들이 잘 설치되는지 검사
+    - name: Install Dependencies
+      run: |
+        python -m pip upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    # 5. [핵심] 파이썬 코드들에 치명적인 문법 에러(Syntax Error)가 없는지 검사
+    - name: Lint with flake8 (Syntax Error Check)
+      run: |
+        pip install flake8
+        # 문법 에러나 정의되지 않은 이름이 있으면 봇이 실패(X) 처리를 합니다.
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
