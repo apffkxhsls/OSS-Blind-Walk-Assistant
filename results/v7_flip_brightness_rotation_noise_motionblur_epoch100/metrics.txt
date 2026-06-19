@@ -1,0 +1,27 @@
+
+Version: v7_flip_brightness_rotation_noise_motionblur_epoch100
+
+Model: YOLO11n
+Epochs: 100
+Image Size: 640
+Batch Size: 8
+
+Dataset
+- Total Images: 1360
+- Classes: 8
+
+Class List
+- bicycle
+- bollard
+- car
+- damaged_braille_block
+- kickboard
+- motorcycle
+- trash
+- utility_pole
+
+Metrics
+Precision: 0.91225
+Recall: 0.46558
+mAP50: 0.54101
+mAP50-95: 0.41639

@@ -3,7 +3,7 @@ name: Python Code Error Check Bot 🤖
 # 1. 언제 봇이 작동할지 정의 (메인 브랜치로 PR이 올 때마다 발동)
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
 
 jobs:
   build:
