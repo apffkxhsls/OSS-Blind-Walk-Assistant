@@ -1,5 +1,5 @@
 
-Version: v7_flip_brightness_rotation_noise_motionblur
+Version: v2_IrregularDatasetSize
 
 Model: YOLO11n
 Epochs: 50
