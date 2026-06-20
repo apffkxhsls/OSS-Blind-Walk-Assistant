@@ -29,6 +29,6 @@ def get_alert_message(detections):
         return None
     names = list({CLASS_KO.get(d["class_name"], d["class_name"]) for d in high_risk})
     if len(names) == 1:
-        return f"전방에 {names[0]}이 감지되었습니다. 주의하세요."
+        return f"전방에 {names[0]}가 감지되었습니다. 주의하세요."
     joined = ", ".join(names[:-1]) + f" 및 {names[-1]}"
     return f"전방에 {joined}가 감지되었습니다. 주의하세요."
