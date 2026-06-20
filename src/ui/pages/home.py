@@ -17,7 +17,8 @@ def render_home_page():
 
     # (노트북 기본 웹캠) 카메라
     cap = cv2.VideoCapture(0)
-    frame_placeholder = st.empty()  # 영상이 들어갈 빈 칸 만들기
+    frame_placeholder = st.empty()
+    alert_placeholder = st.empty()
 
     # 스트림릿 화면에 정지 버튼 만들기
     stop_button = st.button("탐지 중지")
@@ -42,6 +43,15 @@ def render_home_page():
             break
 
         detections = detector.predict(frame)
+
+        frame = detector.draw_boxes(frame, detections)
+
+        alert_msg = get_alert_message(detections)
+
+        if alert_msg:
+            play_warning_sound()
+            speak_guidance(alert_msg)
+            alert_placeholder.error(f"⚠️ {alert_msg}")
 
         # OpenCV 컬러(BGR)를 스트림릿 컬러(RGB)로 변환
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
