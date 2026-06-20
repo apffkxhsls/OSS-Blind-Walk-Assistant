@@ -86,3 +86,24 @@ ax2.grid(alpha=0.3)
 ax2.annotate("", xy=(0.68, 0.92), xytext=(0.45, 0.72),
              arrowprops=dict(arrowstyle="->", color="gray", lw=1.5))
 ax2.text(0.56, 0.85, "Ideal Direction", fontsize=8, color="gray", rotation=35)
+
+# 그래프 3: mAP50 & mAP50-95 바 차트
+ax3 = fig.add_subplot(3, 2, 3)
+bar_width = 0.35
+b1 = ax3.bar(x - bar_width/2, df["mAP50"],    bar_width, label="mAP50",    color="#2563eb", alpha=0.8)
+b2 = ax3.bar(x + bar_width/2, df["mAP50_95"], bar_width, label="mAP50-95", color="#7c3aed", alpha=0.8)
+
+ax3.set_xticks(x)
+ax3.set_xticklabels(labels, fontsize=8)
+ax3.set_ylim(0.25, 0.70)
+ax3.set_title("mAP50 & mAP50-95 Comparison", fontweight="bold")
+ax3.set_ylabel("Score")
+ax3.legend()
+ax3.grid(axis="y", alpha=0.3)
+
+# 최고값 강조
+best_idx = df["mAP50"].argmax()
+ax3.bar(best_idx - bar_width/2, df["mAP50"].iloc[best_idx],
+        bar_width, color="#dc2626", alpha=0.9, label="Best mAP50")
+ax3.text(best_idx - bar_width/2, df["mAP50"].iloc[best_idx] + 0.005,
+         f'{df["mAP50"].iloc[best_idx]:.3f}', ha="center", fontsize=8, color="#dc2626", fontweight="bold")
