@@ -168,3 +168,16 @@ plt.tight_layout()
 plt.savefig("performance_analysis.png", dpi=150, bbox_inches="tight")
 plt.show()
 print("Saved: performance_analysis.png")
+
+# 4. 요약 테이블 출력
+print("\n=== Version-wise Performance Summary ===")
+summary = df[["precision", "recall", "mAP50", "mAP50_95"]].copy()
+summary.index = ["v2(Baseline)", "v3(Normalization)", "v4(+flip)", "v5(+brightness)",
+                 "v6(+rotation)", "v7(+noise/blur)", "v7(epoch100)", "v7(patience15)"]
+print(summary.round(4).to_string())
+
+print("\n=== Class-wise Missed Detections (Number of Versions with TP=0) ===")
+miss = (tp_df == 0).sum(axis=1)
+for cls, cnt in miss.items():
+    status = "Best Version Missed" if cnt == len(tp_df.columns) else f"{cnt} versions missed"
+    print(f"  {cls:<25} {status}")
