@@ -44,7 +44,7 @@ Sookmyung Women's University, Seoul, Republic of Korea
 
 ```bash
 git clone https://github.com/apffkxhsls/OSS-Blind-Walk-Assistant.git
-cd braille-blind-cv-project
+cd OSS-Blind-Walk-Assistant
 pip install -r requirements.txt
 ```
 
@@ -53,7 +53,7 @@ pip install -r requirements.txt
 Pre-trained model weights are not included in this repository due to file size.
 Please download from the link below and place in `models/checkpoints/`.
 
-[![GitHub Releases](https://img.shields.io/badge/GitHub-Releases-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/your-org/braille-blind-cv-project/releases)
+[![GitHub Releases](https://img.shields.io/badge/GitHub-Releases-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/apffkxhsls/OSS-Blind-Walk-Assistant/releases)
 
 models/checkpoints/v7_best.pt   ← place here
 
