@@ -20,8 +20,11 @@ def load_detector(version: str):
     return BrailleDetector(model_path=model_path)
 
 detector = load_detector(version)
+_last_alert_time = 0
 
 def render_home_page():
+    global _last_alert_time
+
     st.title("📡 실시간 보행 방해물 탐지")
     st.caption("웹캠을 통해 전방의 장애물을 실시간으로 탐지하고 음성 안내를 제공합니다.")
 
@@ -31,7 +34,7 @@ def render_home_page():
         if "last_alert_time" not in st.session_state:
             st.session_state.last_alert_time = 0
 
-        ALERT_COOLDOWN = 5  # 몇 초에 한 번 울릴지
+        ALERT_COOLDOWN = 5  # 몇 초에 한 번 경고음 울릴지
         cap = cv2.VideoCapture(0)
         frame_placeholder = st.empty()
         alert_placeholder = st.empty()
@@ -50,10 +53,10 @@ def render_home_page():
             alert_msg = get_alert_message(detections)
             if alert_msg:
                 now = time.time()
-                if now - st.session_state.last_alert_time >= ALERT_COOLDOWN:
+                if now - _last_alert_time >= ALERT_COOLDOWN:
                     play_warning_sound()
                     speak_guidance(alert_msg)
-                    st.session_state.last_alert_time = now
+                    _last_alert_time = now
                 alert_placeholder.error(f"⚠️ {alert_msg}")
             else:
                 alert_placeholder.empty()
