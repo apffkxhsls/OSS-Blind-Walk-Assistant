@@ -86,6 +86,7 @@ def render_home_page():
 
 
 def _show_result(image_np: np.ndarray):
+    global _last_alert_time
     """이미지 업로드 / 테스트 이미지 공통 결과 표시"""
     col1, col2 = st.columns(2)
     with col1:
