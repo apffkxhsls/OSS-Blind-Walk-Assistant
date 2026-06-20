@@ -5,6 +5,9 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from config import WARNING_SOUND, HIGH_RISK_CLASSES
 
+import time
+import streamlit.components.v1 as components
+
 CLASS_KO = {
     "bicycle": "자전거",
     "bollard": "볼라드",
@@ -18,9 +21,21 @@ CLASS_KO = {
 
 def play_warning_sound():
     if WARNING_SOUND.exists():
-        st.audio(str(WARNING_SOUND), format="audio/mp3", autoplay=True)
+        components.html(
+            f"""
+            <audio autoplay>
+                <source src="data:audio/mp3;base64,{_get_audio_base64()}" type="audio/mp3">
+            </audio>
+            """,
+            height=0,
+        )
     else:
         st.warning(f"경고음 파일 없음: {WARNING_SOUND}")
+
+def _get_audio_base64() -> str:
+    import base64
+    with open(WARNING_SOUND, "rb") as f:
+        return base64.b64encode(f.read()).decode()
 
 
 def get_alert_message(detections):
