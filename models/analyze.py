@@ -39,3 +39,28 @@ tp_data = {
 }
 
 tp_df = pd.DataFrame(tp_data, index=class_names)
+
+# 3. 시각화
+fig = plt.figure(figsize=(20, 18), num="BrailleGuard YOLO11n — Performance Analysis by Version")
+fig.suptitle("BrailleGuard YOLO11n — Performance Analysis by Version\n\n", fontsize=16, fontweight="bold", y=0.98)
+
+# 그래프 1: 전체 지표 비교 (라인)
+ax1 = fig.add_subplot(3, 2, 1)
+metrics = ["precision", "recall", "mAP50", "mAP50_95"]
+colors  = ["#2563eb", "#16a34a", "#dc2626", "#d97706"]
+markers = ["o", "s", "^", "D"]
+
+for metric, color, marker in zip(metrics, colors, markers):
+    ax1.plot(range(len(labels)), df[metric], color=color, marker=marker,
+             linewidth=2, markersize=6, label=metric)
+
+ax1.set_xticks(range(len(labels)))
+ax1.set_xticklabels(labels, fontsize=8)
+ax1.set_ylim(0.3, 1.0)
+ax1.set_title("Overall Metric Trends (By Version)", fontweight="bold")
+ax1.set_ylabel("Score")
+ax1.legend(fontsize=8)
+ax1.grid(axis="y", alpha=0.3)
+ax1.axvline(x=5, color="gray", linestyle="--", alpha=0.4)  # v6 최고점 표시
+ax1.annotate("v6 Best mAP50", xy=(4, 0.624), xytext=(3, 0.72),
+             arrowprops=dict(arrowstyle="->", color="red"), color="red", fontsize=8)
