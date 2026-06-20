@@ -155,3 +155,16 @@ ax6.set_xlabel("Average TP (± Standard Deviation)")
 ax6.set_title("Class-wise Detection Stability\n(Lower is Less Stable)", fontweight="bold")
 ax6.grid(axis="x", alpha=0.3)
 ax6.axvline(x=2, color="gray", linestyle="--", alpha=0.5)
+
+# 범례
+legend_patches = [
+    mpatches.Patch(color="#dc2626", label="Unstable (mean < 1)"),
+    mpatches.Patch(color="#d97706", label="Moderate (1 ≤ mean < 3)"),
+    mpatches.Patch(color="#16a34a", label="Stable (mean ≥ 3)"),
+]
+ax6.legend(handles=legend_patches, fontsize=8, loc="lower right")
+
+plt.tight_layout()
+plt.savefig("performance_analysis.png", dpi=150, bbox_inches="tight")
+plt.show()
+print("Saved: performance_analysis.png")
