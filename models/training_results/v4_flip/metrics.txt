@@ -1,0 +1,27 @@
+
+Version: v4_flip
+
+Model: YOLO11n
+Epochs: 50
+Image Size: 640
+Batch Size: 8
+
+Dataset
+- Total Images: 823
+- Classes: 8
+
+Class List
+- bicycle
+- bollard
+- car
+- damaged_braille_block
+- kickboard
+- motorcycle
+- trash
+- utility_pole
+
+Metrics
+Precision: 0.7511
+Recall: 0.49176
+mAP50: 0.54689
+mAP50-95: 0.40128
