@@ -102,6 +102,9 @@ def _show_result(image_np: np.ndarray):
         st.subheader("탐지 결과")
         st.image(result_img, use_container_width=True)
 
+    ALERT_COOLDOWN = 5
+    alert_placeholder = st.empty()
+
     st.divider()
     if detections:
         st.subheader(f"탐지된 객체 — {len(detections)}개")
@@ -110,9 +113,12 @@ def _show_result(image_np: np.ndarray):
             st.markdown(f"**{risk}** · {det['class_name']} · 신뢰도 {det['confidence']:.1%}")
         alert_msg = get_alert_message(detections)
         if alert_msg:
-            st.error(f"⚠️ {alert_msg}")
-            play_warning_sound()
-            speak_guidance(alert_msg)
+            now = time.time()
+            if _last_alert_time is None or now - _last_alert_time >= ALERT_COOLDOWN:
+                  play_warning_sound()
+                  speak_guidance(alert_msg)
+                  _last_alert_time = now
+                  alert_placeholder.error(f"⚠️ {alert_msg}")
     else:
         st.success("✅ 방해물이 감지되지 않았습니다.")
 
