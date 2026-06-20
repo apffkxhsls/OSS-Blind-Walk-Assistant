@@ -11,7 +11,7 @@ from src.utils.alert import play_warning_sound, get_alert_message
 
 version = st.sidebar.selectbox(
     "모델 버전 선택",
-    ["v2_best", "v3_best", "v4_best", "v5_best", "v6_best", "v7_best"]
+    ["v3_best", "v4_best", "v5_best", "v6_best", "v7_best"]
 )
 
 @st.cache_resource
