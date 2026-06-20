@@ -22,7 +22,7 @@ def speak_guidance(text: str):
                 <source src="data:audio/mp3;base64,{audio_b64}" type="audio/mp3">
             </audio>
             """,
-            height=0,
+            height=1,
         )
     except Exception as e:
         st.error(f"음성 안내 오류: {e}")

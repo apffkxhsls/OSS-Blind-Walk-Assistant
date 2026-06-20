@@ -24,7 +24,7 @@ def play_warning_sound():
                 <source src="data:audio/mp3;base64,{_get_audio_base64()}" type="audio/mp3">
             </audio>
             """,
-            height=0,
+            height=1,
         )
     else:
         st.warning(f"경고음 파일 없음: {WARNING_SOUND}")
