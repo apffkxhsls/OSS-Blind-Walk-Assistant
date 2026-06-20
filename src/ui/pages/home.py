@@ -19,8 +19,7 @@ def load_detector(version: str):
     model_path = CHECKPOINT_DIR / f"{version}.pt"
     return BrailleDetector(model_path=model_path)
 
-with st.spinner("모델 로딩 중... 잠시만 기다려주세요 🔄"):
-    detector = load_detector(version)
+detector = load_detector(version)
 
 def render_home_page():
     st.title("📡 실시간 보행 방해물 탐지")
