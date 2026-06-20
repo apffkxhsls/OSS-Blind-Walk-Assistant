@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import streamlit as st
 from PIL import Image
+import time
 
 from src.detection.detector import BrailleDetector
 from config import CHECKPOINT_DIR, TEST_IMAGES_DIR
@@ -27,6 +28,10 @@ def render_home_page():
     mode = st.radio("입력 방식", ["📷 실시간 웹캠", "🖼️ 이미지 업로드", "🗂️ 테스트 이미지"], horizontal=True)
 
     if mode == "📷 실시간 웹캠":
+        if "last_alert_time" not in st.session_state:
+            st.session_state.last_alert_time = 0
+
+        ALERT_COOLDOWN = 5  # 몇 초에 한 번 울릴지
         cap = cv2.VideoCapture(0)
         frame_placeholder = st.empty()
         alert_placeholder = st.empty()
@@ -44,8 +49,11 @@ def render_home_page():
 
             alert_msg = get_alert_message(detections)
             if alert_msg:
-                play_warning_sound()
-                speak_guidance(alert_msg)
+                now = time.time()
+                if now - st.session_state.last_alert_time >= ALERT_COOLDOWN:
+                    play_warning_sound()
+                    speak_guidance(alert_msg)
+                    st.session_state.last_alert_time = now
                 alert_placeholder.error(f"⚠️ {alert_msg}")
             else:
                 alert_placeholder.empty()
