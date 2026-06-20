@@ -64,6 +64,7 @@ def render_home_page():
 
         cap.release()
         cv2.destroyAllWindows()
+        st.stop()
 
     elif mode == "🖼️ 이미지 업로드":
         uploaded = st.file_uploader("이미지 업로드", type=["jpg", "jpeg", "png"])
