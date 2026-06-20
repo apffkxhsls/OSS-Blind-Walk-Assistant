@@ -140,3 +140,18 @@ for i in range(len(class_names)):
         ax5.text(j, i, str(val), ha="center", va="center",
                  fontsize=9, fontweight="bold",
                  color="white" if val > 5 else "black")
+        
+# 그래프 6: 클래스별 탐지 안정성 (버전 간 분산)
+ax6 = fig.add_subplot(3, 2, 6)
+class_means = tp_df.mean(axis=1)
+class_stds  = tp_df.std(axis=1)
+
+bars = ax6.barh(class_names, class_means, xerr=class_stds,
+                color=["#dc2626" if m < 1 else "#16a34a" if m >= 3 else "#d97706"
+                       for m in class_means],
+                capsize=4, alpha=0.8)
+
+ax6.set_xlabel("Average TP (± Standard Deviation)")
+ax6.set_title("Class-wise Detection Stability\n(Lower is Less Stable)", fontweight="bold")
+ax6.grid(axis="x", alpha=0.3)
+ax6.axvline(x=2, color="gray", linestyle="--", alpha=0.5)
