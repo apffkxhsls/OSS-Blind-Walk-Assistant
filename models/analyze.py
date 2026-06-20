@@ -107,3 +107,19 @@ ax3.bar(best_idx - bar_width/2, df["mAP50"].iloc[best_idx],
         bar_width, color="#dc2626", alpha=0.9, label="Best mAP50")
 ax3.text(best_idx - bar_width/2, df["mAP50"].iloc[best_idx] + 0.005,
          f'{df["mAP50"].iloc[best_idx]:.3f}', ha="center", fontsize=8, color="#dc2626", fontweight="bold")
+
+# 그래프 4: 데이터셋 크기 vs mAP50
+ax4 = fig.add_subplot(3, 2, 4)
+img_counts = [v["images"] for v in versions.values()]
+map50s = df["mAP50"].tolist()
+
+ax4.scatter(img_counts, map50s, s=100, c=range(len(img_counts)),
+            cmap="RdYlGn", zorder=5)
+for i, label in enumerate(short_labels):
+    ax4.annotate(label, (img_counts[i], map50s[i]),
+                 textcoords="offset points", xytext=(5, 3), fontsize=7)
+
+ax4.set_xlabel("Number of Training Images")
+ax4.set_ylabel("mAP50")
+ax4.set_title("Dataset Size vs mAP50", fontweight="bold")
+ax4.grid(alpha=0.3)
