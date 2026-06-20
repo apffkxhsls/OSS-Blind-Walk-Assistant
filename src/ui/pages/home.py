@@ -1,52 +1,128 @@
 import cv2
+import numpy as np
 import streamlit as st
+from PIL import Image
+import time
 
+from src.detection.detector import BrailleDetector
+from config import CHECKPOINT_DIR, TEST_IMAGES_DIR
 from src.utils.tts import speak_guidance
 from src.utils.alert import play_warning_sound, get_alert_message
 
+version = "v7_best"
+
+@st.cache_resource
+def load_detector(version: str):
+    model_path = CHECKPOINT_DIR / f"{version}.pt"
+    return BrailleDetector(model_path=model_path)
+
+detector = load_detector(version)
+
+_last_alert_time = None
+
 def render_home_page():
-    st.title("👁️ 실시간 보행 방해물 탐지")
+    global _last_alert_time
+
+    st.title("📡 실시간 보행 방해물 탐지")
     st.caption("웹캠을 통해 전방의 장애물을 실시간으로 탐지하고 음성 안내를 제공합니다.")
 
-    # (노트북 기본 웹캠) 카메라
-    cap = cv2.VideoCapture(0)
-    frame_placeholder = st.empty()  # 영상이 들어갈 빈 칸 만들기
+    mode = st.radio("입력 방식", ["📷 실시간 웹캠", "🖼️ 이미지 업로드", "🗂️ 테스트 이미지"], horizontal=True)
 
-    # 스트림릿 화면에 정지 버튼 만들기
-    stop_button = st.button("탐지 중지")
+    if mode == "📷 실시간 웹캠":
+        st.info("📢 경고음 활성화를 위해 아래 버튼을 눌러 시작하세요.")
+        start_button = st.button("▶️ 탐지 시작")
 
-    while cap.isOpened() and not stop_button:
-        ret, frame = cap.read()
+        if start_button:
+            ALERT_COOLDOWN = 5
+            cap = cv2.VideoCapture(0)
+            frame_placeholder = st.empty()
+            alert_placeholder = st.empty()
+            stop_button = st.button("탐지 중지")
 
-        # YOLO 모델이 frame 분석 후 가상의 결과 데이터를 아래처럼 리스트로 뱉었다고 가정
-        # 현희가 구현할 YOLO 결과 포맷 예시
-        # results = model(frame)
-        mock_detections = [
-            {"class_name": "킥보드", "is_high_risk": True},
-            {"class_name": "자동차", "is_high_risk": True}]
+            while cap.isOpened() and not stop_button:
+                ret, frame = cap.read()
 
-        alert_msg = get_alert_message(mock_detections)
+                if not ret:
+                    st.error("웹캠을 불러올 수 없습니다.")
+                    break
 
-        if alert_msg: 
-            play_warning_sound()     # 띵동! 소리 재생
-            speak_guidance(alert_msg) # "전방에 킥보드 및 자동차이 감지되었습니다..." TTS 안내
-            
-            st.error(alert_msg) # 화면에도 빨간 창으로 경고 띄우기
+                detections = detector.predict(frame)
+                frame = detector.draw_boxes(frame, detections)
 
-        if not ret:
-            st.error("웹캠을 불러올 수 없습니다.")
-            break
+                alert_msg = get_alert_message(detections)
+                if alert_msg:
+                    now = time.time()
+                    if _last_alert_time is None or now - _last_alert_time >= ALERT_COOLDOWN:
+                        play_warning_sound()
+                        speak_guidance(alert_msg)
+                        _last_alert_time = now
+                    alert_placeholder.error(f"⚠️ {alert_msg}")
+                else:
+                    alert_placeholder.empty()
 
-        # OpenCV 컬러(BGR)를 스트림릿 컬러(RGB)로 변환
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                frame_placeholder.image(frame, channels="RGB", width=700)
 
-        # 빈 칸에 실시간으로 프레임 채워넣기
-        frame_placeholder.image(frame, channels="RGB", use_container_width=True)
+            try:
+                cap.release()
+                cv2.destroyAllWindows()
+            except Exception:
+                pass
 
-    # 자원 해제
-    cap.release()
-    cv2.destroyAllWindows()
+    elif mode == "🖼️ 이미지 업로드":
+        uploaded = st.file_uploader("이미지 업로드", type=["jpg", "jpeg", "png"])
+        if uploaded:
+            image_np = np.array(Image.open(uploaded).convert("RGB"))
+            _show_result(image_np)
 
-# 페이지 테스트용 실행 코드
+    elif mode == "🗂️ 테스트 이미지":
+        test_imgs = list(TEST_IMAGES_DIR.glob("*.jpg")) + list(TEST_IMAGES_DIR.glob("*.png"))
+        if test_imgs:
+            selected = st.selectbox("테스트 이미지 선택", [f.name for f in test_imgs])
+            image_np = np.array(Image.open(TEST_IMAGES_DIR / selected).convert("RGB"))
+            _show_result(image_np)
+        else:
+            st.info(f"`{TEST_IMAGES_DIR}` 에 테스트 이미지를 추가하세요.")
+
+
+def _show_result(image_np: np.ndarray):
+    global _last_alert_time
+    """이미지 업로드 / 테스트 이미지 공통 결과 표시"""
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("원본")
+        st.image(image_np, use_container_width=True)
+
+    with st.spinner("탐지 중..."):
+        image_bgr = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
+        detections = detector.predict(image_bgr)
+        result_img = detector.draw_boxes(image_bgr, detections)
+        result_img = cv2.cvtColor(result_img, cv2.COLOR_BGR2RGB)
+
+    with col2:
+        st.subheader("탐지 결과")
+        st.image(result_img, use_container_width=True)
+
+    ALERT_COOLDOWN = 5
+    alert_placeholder = st.empty()
+
+    st.divider()
+    if detections:
+        st.subheader(f"탐지된 객체 — {len(detections)}개")
+        for det in detections:
+            risk = "🔴 고위험" if det["is_high_risk"] else "🟡 주의"
+            st.markdown(f"**{risk}** · {det['class_name']} · 신뢰도 {det['confidence']:.1%}")
+        alert_msg = get_alert_message(detections)
+        if alert_msg:
+            now = time.time()
+            if _last_alert_time is None or now - _last_alert_time >= ALERT_COOLDOWN:
+                  play_warning_sound()
+                  speak_guidance(alert_msg)
+                  _last_alert_time = now
+                  alert_placeholder.error(f"⚠️ {alert_msg}")
+    else:
+        st.success("✅ 방해물이 감지되지 않았습니다.")
+
+
 if __name__ == "__main__":
     render_home_page()

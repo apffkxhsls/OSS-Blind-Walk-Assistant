@@ -18,8 +18,8 @@ TEST_DIR        = DATA_DIR / "processed" / "test"
 
 # ── 모델 ──────────────────────────────────────
 MODELS_DIR      = ROOT / "models"
-CHECKPOINT_DIR  = MODELS_DIR / "checkpoints"
-BEST_MODEL_PATH = CHECKPOINT_DIR / "best.pt"
+CHECKPOINT_DIR  = ROOT / "models" / "checkpoints"
+BEST_MODEL_PATH = CHECKPOINT_DIR / "v7_best.pt"
 LAST_MODEL_PATH = CHECKPOINT_DIR / "last.pt"
 DATASET_YAML    = MODELS_DIR / "configs" / "dataset.yaml"
 MODEL_YAML      = MODELS_DIR / "configs" / "model.yaml"
@@ -36,12 +36,14 @@ IMG_SIZE             = 640
 
 # ── 클래스 라벨 ───────────────────────────────
 CLASS_NAMES = [
-    "점자블록",
-    "킥보드",
-    "자전거",
-    "볼라드",
-    "보도블록_파손",
+    "bicycle",
+    "bollard", 
+    "car",
+    "damaged_braille_block",
+    "kickboard",
+    "motorcycle",
+    "trash",
+    "utility_pole",
 ]
 
-HIGH_RISK_CLASSES = {"킥보드", "자전거", "볼라드"}
-MID_RISK_CLASSES  = {"점자블록", "보도블록_파손"}
+HIGH_RISK_CLASSES = {"kickboard", "bicycle", "bollard", "braille_block", "damaged_sidewalk_block"}
