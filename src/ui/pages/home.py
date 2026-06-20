@@ -33,10 +33,6 @@ def render_home_page():
     while cap.isOpened() and not stop_button:
         ret, frame = cap.read()
 
-        mock_detections = [
-            {"class_name": "킥보드", "is_high_risk": True},
-            {"class_name": "자동차", "is_high_risk": True}]
-
         if not ret:
             st.error("웹캠을 불러올 수 없습니다.")
             break
@@ -50,6 +46,8 @@ def render_home_page():
             play_warning_sound()
             speak_guidance(alert_msg)
             alert_placeholder.error(f"⚠️ {alert_msg}")
+        else:
+            alert_placeholder.empty()
 
         # OpenCV 컬러(BGR)를 스트림릿 컬러(RGB)로 변환
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
