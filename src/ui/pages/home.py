@@ -21,11 +21,10 @@ def load_detector(version: str):
 
 detector = load_detector(version)
 
-_last_alert_time = 0
-_first_alert = True
+_last_alert_time = None
 
 def render_home_page():
-    global _last_alert_time, _first_alert
+    global _last_alert_time
 
     st.title("📡 실시간 보행 방해물 탐지")
     st.caption("웹캠을 통해 전방의 장애물을 실시간으로 탐지하고 음성 안내를 제공합니다.")
@@ -55,11 +54,10 @@ def render_home_page():
             alert_msg = get_alert_message(detections)
             if alert_msg:
                 now = time.time()
-                if _first_alert or now - _last_alert_time >= ALERT_COOLDOWN:
+                if _last_alert_time is None or now - _last_alert_time >= ALERT_COOLDOWN:
                     play_warning_sound()
                     speak_guidance(alert_msg)
                     _last_alert_time = now
-                    _first_alert = False
                 alert_placeholder.error(f"⚠️ {alert_msg}")
             else:
                 alert_placeholder.empty()
