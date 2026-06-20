@@ -29,44 +29,45 @@ def render_home_page():
     mode = st.radio("입력 방식", ["📷 실시간 웹캠", "🖼️ 이미지 업로드", "🗂️ 테스트 이미지"], horizontal=True)
 
     if mode == "📷 실시간 웹캠":
-        if "last_alert_time" not in st.session_state:
-            st.session_state.last_alert_time = 0
+        st.info("📢 경고음 활성화를 위해 아래 버튼을 눌러 시작하세요.")
+        start_button = st.button("▶️ 탐지 시작")
 
-        ALERT_COOLDOWN = 5  # 몇 초에 한 번 경고음 울릴지
-        cap = cv2.VideoCapture(0)
-        frame_placeholder = st.empty()
-        alert_placeholder = st.empty()
-        stop_button = st.button("탐지 중지")
+        if start_button:
+            ALERT_COOLDOWN = 5
+            cap = cv2.VideoCapture(0)
+            frame_placeholder = st.empty()
+            alert_placeholder = st.empty()
+            stop_button = st.button("탐지 중지")
 
-        while cap.isOpened() and not stop_button:
-            ret, frame = cap.read()
+            while cap.isOpened() and not stop_button:
+                ret, frame = cap.read()
 
-            if not ret:
-                st.error("웹캠을 불러올 수 없습니다.")
-                break
+                if not ret:
+                    st.error("웹캠을 불러올 수 없습니다.")
+                    break
 
-            detections = detector.predict(frame)
-            frame = detector.draw_boxes(frame, detections)
+                detections = detector.predict(frame)
+                frame = detector.draw_boxes(frame, detections)
 
-            alert_msg = get_alert_message(detections)
-            if alert_msg:
-                now = time.time()
-                if _last_alert_time is None or now - _last_alert_time >= ALERT_COOLDOWN:
-                    play_warning_sound()
-                    speak_guidance(alert_msg)
-                    _last_alert_time = now
-                alert_placeholder.error(f"⚠️ {alert_msg}")
-            else:
-                alert_placeholder.empty()
+                alert_msg = get_alert_message(detections)
+                if alert_msg:
+                    now = time.time()
+                    if _last_alert_time is None or now - _last_alert_time >= ALERT_COOLDOWN:
+                        play_warning_sound()
+                        speak_guidance(alert_msg)
+                        _last_alert_time = now
+                    alert_placeholder.error(f"⚠️ {alert_msg}")
+                else:
+                    alert_placeholder.empty()
 
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            frame_placeholder.image(frame, channels="RGB", width=700)
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                frame_placeholder.image(frame, channels="RGB", width=700)
 
-        try:
-            cap.release()
-            cv2.destroyAllWindows()
-        except Exception:
-            pass
+            try:
+                cap.release()
+                cv2.destroyAllWindows()
+            except Exception:
+                pass
 
     elif mode == "🖼️ 이미지 업로드":
         uploaded = st.file_uploader("이미지 업로드", type=["jpg", "jpeg", "png"])
