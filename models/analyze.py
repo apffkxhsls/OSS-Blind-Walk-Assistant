@@ -64,3 +64,25 @@ ax1.grid(axis="y", alpha=0.3)
 ax1.axvline(x=5, color="gray", linestyle="--", alpha=0.4)  # v6 최고점 표시
 ax1.annotate("v6 Best mAP50", xy=(4, 0.624), xytext=(3, 0.72),
              arrowprops=dict(arrowstyle="->", color="red"), color="red", fontsize=8)
+
+# 그래프 2: Precision vs Recall 트레이드오프
+ax2 = fig.add_subplot(3, 2, 2)
+short_labels = ["v2", "v3", "v4", "v5", "v6", "v7", "v7\nepoch100", "v7\npatience15"]
+scatter_colors = plt.cm.RdYlGn(np.linspace(0.2, 0.9, len(labels)))
+
+for i, (label, color) in enumerate(zip(short_labels, scatter_colors)):
+    ax2.scatter(df["recall"].iloc[i], df["precision"].iloc[i],
+                color=color, s=120, zorder=5)
+    ax2.annotate(label, (df["recall"].iloc[i], df["precision"].iloc[i]),
+                 textcoords="offset points", xytext=(6, 4), fontsize=7)
+
+ax2.set_xlabel("Recall")
+ax2.set_ylabel("Precision")
+ax2.set_title("Precision vs Recall Trade-off", fontweight="bold")
+ax2.set_xlim(0.35, 0.70)
+ax2.set_ylim(0.60, 0.95)
+ax2.grid(alpha=0.3)
+# 이상적인 방향 표시
+ax2.annotate("", xy=(0.68, 0.92), xytext=(0.45, 0.72),
+             arrowprops=dict(arrowstyle="->", color="gray", lw=1.5))
+ax2.text(0.56, 0.85, "Ideal Direction", fontsize=8, color="gray", rotation=35)
