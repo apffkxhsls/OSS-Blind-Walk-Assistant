@@ -62,9 +62,11 @@ def render_home_page():
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             frame_placeholder.image(frame, channels="RGB", width=700)
 
-        cap.release()
-        cv2.destroyAllWindows()
-        st.stop()
+        try:
+            cap.release()
+            cv2.destroyAllWindows()
+        except Exception:
+            pass
 
     elif mode == "🖼️ 이미지 업로드":
         uploaded = st.file_uploader("이미지 업로드", type=["jpg", "jpeg", "png"])
