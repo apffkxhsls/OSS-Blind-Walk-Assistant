@@ -1,7 +1,9 @@
 from pathlib import Path
 import cv2
 import numpy as np
+from streamlit import image
 from ultralytics import YOLO
+from PIL import ImageFont, ImageDraw, Image
 
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -44,12 +46,19 @@ class BrailleDetector:
         return detections
 
     def draw_boxes(self, image: np.ndarray, detections: list[dict]) -> np.ndarray:
-        img = image.copy()
+        img_pil = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+        draw = ImageDraw.Draw(img_pil)
+        
+        try:
+            font = ImageFont.truetype("malgun.ttf", 20)
+        except:
+            font = ImageFont.load_default()
+
         for det in detections:
             x1, y1, x2, y2 = map(int, det["bbox"])
-            color = (0, 0, 255) if det["is_high_risk"] else (0, 200, 100)
+            color = (255, 0, 0) if det["is_high_risk"] else (0, 200, 100)
             label = f'{det["class_name"]} {det["confidence"]:.2f}'
-            cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
-            cv2.putText(img, label, (x1, y1 - 8),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
-        return img
+            draw.rectangle([x1, y1, x2, y2], outline=color, width=2)
+            draw.text((x1, y1 - 24), label, fill=color, font=font)
+
+        return cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)
