@@ -43,7 +43,7 @@ Sookmyung Women's University, Seoul, Republic of Korea
 - YOLO11n (Ultralytics)
 
 ```bash
-git clone https://github.com/your-org/braille-blind-cv-project.git
+git clone https://github.com/apffkxhsls/OSS-Blind-Walk-Assistant.git
 cd braille-blind-cv-project
 pip install -r requirements.txt
 ```
@@ -179,3 +179,9 @@ braille-blind-cv-project/
 ## Acknowledgement
 
 This project uses [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) for object detection and [gTTS](https://github.com/pndurette/gTTS) for Korean TTS guidance.
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
