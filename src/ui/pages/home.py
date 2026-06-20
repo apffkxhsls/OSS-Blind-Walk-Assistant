@@ -56,8 +56,7 @@ def render_home_page():
         # OpenCV 컬러(BGR)를 스트림릿 컬러(RGB)로 변환
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        # 빈 칸에 실시간으로 프레임 채워넣기
-        frame_placeholder.image(frame, channels="RGB", use_container_width=True)
+        frame_placeholder.image(frame, channels="RGB", width=700)
 
     # 자원 해제
     cap.release()
