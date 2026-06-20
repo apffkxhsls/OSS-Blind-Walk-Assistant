@@ -18,8 +18,8 @@ TEST_DIR        = DATA_DIR / "processed" / "test"
 
 # ── 모델 ──────────────────────────────────────
 MODELS_DIR      = ROOT / "models"
-CHECKPOINT_DIR  = MODELS_DIR / "checkpoints"
-BEST_MODEL_PATH = CHECKPOINT_DIR / "best.pt"
+CHECKPOINT_DIR = ROOT / "training_results" / "checkpoints"
+BEST_MODEL_PATH = CHECKPOINT_DIR / "v7_best.pt"
 LAST_MODEL_PATH = CHECKPOINT_DIR / "last.pt"
 DATASET_YAML    = MODELS_DIR / "configs" / "dataset.yaml"
 MODEL_YAML      = MODELS_DIR / "configs" / "model.yaml"

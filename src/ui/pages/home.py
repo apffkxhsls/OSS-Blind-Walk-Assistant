@@ -2,18 +2,25 @@ import cv2
 import streamlit as st
 
 from src.detection.detector import BrailleDetector
+from config import CHECKPOINT_DIR
 from src.utils.tts import speak_guidance
 from src.utils.alert import play_warning_sound, get_alert_message
 
+version = st.sidebar.selectbox(
+    "모델 버전 선택",
+    ["v2_best", "v3_best", "v4_best", "v5_best", "v6_best", "v7_best"]
+)
+
 @st.cache_resource
-def load_detector():
-    return BrailleDetector()
+def load_detector(version: str):
+    model_path = CHECKPOINT_DIR / f"{version}.pt"
+    return BrailleDetector(model_path=model_path)
+
+detector = load_detector(version)
 
 def render_home_page():
     st.title("👁️ 실시간 보행 방해물 탐지")
     st.caption("웹캠을 통해 전방의 장애물을 실시간으로 탐지하고 음성 안내를 제공합니다.")
-
-    detector = load_detector()
 
     # (노트북 기본 웹캠) 카메라
     cap = cv2.VideoCapture(0)
@@ -30,20 +37,11 @@ def render_home_page():
             {"class_name": "킥보드", "is_high_risk": True},
             {"class_name": "자동차", "is_high_risk": True}]
 
-        alert_msg = get_alert_message(mock_detections)
-
-        if alert_msg: 
-            play_warning_sound()     # 띵동! 소리 재생
-            speak_guidance(alert_msg) # "전방에 킥보드 및 자동차이 감지되었습니다..." TTS 안내
-            
-            st.error(alert_msg) # 화면에도 빨간 창으로 경고 띄우기
-
         if not ret:
             st.error("웹캠을 불러올 수 없습니다.")
             break
 
         detections = detector.predict(frame)
-
         frame = detector.draw_boxes(frame, detections)
 
         alert_msg = get_alert_message(detections)
