@@ -22,7 +22,7 @@ def load_detector(version: str):
 detector = load_detector(version)
 
 def render_home_page():
-    st.title("👁️ 실시간 보행 방해물 탐지")
+    st.title("📡 실시간 보행 방해물 탐지")
     st.caption("웹캠을 통해 전방의 장애물을 실시간으로 탐지하고 음성 안내를 제공합니다.")
 
     mode = st.radio("입력 방식", ["📷 실시간 웹캠", "🖼️ 이미지 업로드", "🗂️ 테스트 이미지"], horizontal=True)
