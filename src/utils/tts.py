@@ -16,7 +16,7 @@ def speak_guidance(text: str):
         with open(TEMP_FILE, "rb") as f:
             audio_b64 = base64.b64encode(f.read()).decode()
 
-        components.html(
+        st.iframe(
             f"""
             <audio autoplay>
                 <source src="data:audio/mp3;base64,{audio_b64}" type="audio/mp3">

@@ -3,10 +3,7 @@ from pathlib import Path
 
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
-from config import WARNING_SOUND, HIGH_RISK_CLASSES
-
-import time
-import streamlit.components.v1 as components
+from config import WARNING_SOUND
 
 CLASS_KO = {
     "bicycle": "자전거",
@@ -21,7 +18,7 @@ CLASS_KO = {
 
 def play_warning_sound():
     if WARNING_SOUND.exists():
-        components.html(
+        st.iframe(
             f"""
             <audio autoplay>
                 <source src="data:audio/mp3;base64,{_get_audio_base64()}" type="audio/mp3">
