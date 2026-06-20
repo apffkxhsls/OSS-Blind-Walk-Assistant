@@ -123,3 +123,20 @@ ax4.set_xlabel("Number of Training Images")
 ax4.set_ylabel("mAP50")
 ax4.set_title("Dataset Size vs mAP50", fontweight="bold")
 ax4.grid(alpha=0.3)
+
+# 그래프 5: 클래스별 TP 히트맵
+ax5 = fig.add_subplot(3, 2, 5)
+im = ax5.imshow(tp_df.values, cmap="YlOrRd", aspect="auto")
+ax5.set_xticks(range(len(tp_df.columns)))
+ax5.set_xticklabels(tp_df.columns, fontsize=8)
+ax5.set_yticks(range(len(class_names)))
+ax5.set_yticklabels(class_names, fontsize=8)
+ax5.set_title("Class-wise TP (Based on Version-specific Confusion Matrix)", fontweight="bold")
+plt.colorbar(im, ax=ax5)
+
+for i in range(len(class_names)):
+    for j in range(len(tp_df.columns)):
+        val = tp_df.values[i, j]
+        ax5.text(j, i, str(val), ha="center", va="center",
+                 fontsize=9, fontweight="bold",
+                 color="white" if val > 5 else "black")
