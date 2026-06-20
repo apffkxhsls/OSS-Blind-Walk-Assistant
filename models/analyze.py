@@ -20,3 +20,22 @@ versions = {
 df = pd.DataFrame(versions).T
 labels = list(versions.keys())
 x = np.arange(len(labels))
+
+# 2. confusion matrix에서 읽은 클래스별 TP 데이터
+# 각 버전의 confusion matrix 대각선 값 (TP)
+# 순서: bicycle, bollard, car, damaged_braille_block, kickboard, motorcycle, trash, utility_pole
+class_names = [
+    "bicycle", "bollard", "car", "damaged_braille_block",
+    "kickboard", "motorcycle", "trash", "utility_pole"
+]
+
+# v2, v3는 클래스 10개라 bollard/fire_hydrant/traffic_cone 포함 → 8클래스 버전과 직접 비교 불가하므로 v4부터 클래스별 분석
+tp_data = {
+    "v4\n(+flip)":       [10, 0, 3, 3, 3, 1, 4, 2],
+    "v5\n(+brightness)": [10, 0, 3, 3, 2, 1, 6, 0],
+    "v6\n(+rotation)":   [10, 0, 3, 3, 2, 1, 6, 0],
+    "v7\n(+noise/blur)": [9,  0, 3, 2, 3, 1, 7, 0],
+    "v7\n(epoch100)":    [9,  0, 3, 2, 3, 1, 7, 0],
+}
+
+tp_df = pd.DataFrame(tp_data, index=class_names)
