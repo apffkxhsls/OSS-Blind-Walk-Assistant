@@ -176,7 +176,7 @@ braille-blind-cv-project/
 | Team Member | Responsibilities |
 | :--- | :--- |
 | **Yeji Kim** | **Project Lead & Integration Developer**<br>• Integrated YOLO11n model inference with Streamlit real-time UI loop<br>• Managed GitHub branching strategy, repository structure, and collaboration workflow<br>• Oversee overall project schedule, milestones, and deliverables<br>• Conducted comprehensive model performance benchmarking and visualization (v2–v7) |
-| **Jihyun Park** | **Data Engineer**<br>• • Collected and annotated a custom sidewalk dataset using Roboflow<br>• Managed dataset versioning (v2–v7), class refinement, and data augmentation<br>• Prepared augmented datasets for model training |
+| **Jihyun Park** | **Data Engineer**<br>• Collected and annotated a custom sidewalk dataset using Roboflow<br>• Managed dataset versioning (v2–v7), class refinement, and data augmentation<br>• Prepared augmented datasets for model training |
 | **Hyunhee Shim** | **AI Model Developer**<br>• Fine-tuned YOLO11n on the custom sidewalk dataset<br>• Managed YOLO11n training workflows, checkpoints, and model artifacts |
 
 ---
