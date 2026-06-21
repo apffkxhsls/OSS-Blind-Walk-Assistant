@@ -1,6 +1,6 @@
 # BrailleGuard: Real-Time Obstacle Detection System for Visually Impaired Pedestrians
 
-#### Yeji Kim, Jihyun Park, Hyunhee Sim
+#### Yeji Kim, Jihyun Park, Hyunhee Shim
 
 Sookmyung Women's University, Seoul, Republic of Korea
 
@@ -18,7 +18,10 @@ Sookmyung Women's University, Seoul, Republic of Korea
 #### Network Architecture
 
 <p align="center">
-  <img width="700" src="./assets/images/pipeline.png">
+  <img width="700" src="./assets/images/pipeline1.png">
+</p>
+<p align="center">
+  <img width="700" src="./assets/images/pipeline2.png">
 </p>
 
 #### Detection Example
@@ -50,7 +53,7 @@ pip install -r requirements.txt
 
 #### Model Weights
 
-Pre-trained model weights are not included in this repository due to file size.
+Trained model weights are not included in this repository due to file size.
 Please download from the link below and place in `models/checkpoints/`.
 
 [![GitHub Releases](https://img.shields.io/badge/GitHub-Releases-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/apffkxhsls/OSS-Blind-Walk-Assistant/releases)
@@ -81,18 +84,22 @@ Custom dataset collected and labeled for Korean sidewalk environments using [Rob
 - motorcycle
 - trash
 - utility_pole
-
+- (fire_hydrant)
+- (traffic_cone)
 ---
 
 ## Training
 
-```bash
-make train
-# or
-python src/train.py
-```
+Training notebooks are available in `models/notebooks/`.
 
-Training configuration is defined in `models/configs/dataset.yaml`.
+### Common Training Settings
+
+- Model: YOLO11n
+- Epochs: 50
+- Image Size: 640
+- Batch Size: 8
+
+Dataset configuration is defined in `data.yaml`.
 
 ---
 
@@ -120,8 +127,8 @@ Three input modes are supported:
 | v3 (Normalization) | 0.749 | 0.586 | 0.619 | 0.414 |
 | v4 (+Flip) | 0.751 | 0.492 | 0.547 | 0.401 |
 | v5 (+Brightness) | 0.830 | 0.510 | 0.543 | 0.423 |
-| **v6 (+Rotation)** | **0.803** | **0.549** | **0.624** | **0.456** |
-| v7 (+Noise/MotionBlur) | 0.791 | 0.561 | 0.584 | 0.432 |
+| v6 (+Rotation) | 0.803 | 0.549 | 0.624 | 0.456 |
+| **v7 (+Noise/MotionBlur)** | **0.791** | **0.561** | **0.584** | **0.432** |
 | v7 (Epoch100) | 0.912 | 0.466 | 0.541 | 0.416 |
 | v7 (Patience15) | 0.830 | 0.458 | 0.518 | 0.357 |
 
@@ -140,8 +147,6 @@ braille-blind-cv-project/
 │       └── warning.mp3       ← Reference TTS alert sound
 ├── models/
 │   ├── checkpoints/          ← [User Action Required] Place downloaded 'v7_best.pt' here
-│   ├── configs/
-│   │   └── dataset.yaml
 │   ├── notebooks/
 │   │   └── BlindWalk_YOLO_Training_v2_to_v7.ipynb
 │   ├── training_results/
@@ -170,15 +175,19 @@ braille-blind-cv-project/
 
 | Team Member | Responsibilities |
 | :--- | :--- |
-| **Yeji Kim** | • **Project Lead & Integration Developer**<br>• Connected YOLO11n model inference with Streamlit UI loop<br>• Established GitHub repository structure, workflow, and guidelines<br>• Managed overall project schedule and milestones<br>• Conducted comprehensive model performance benchmarking |
-| Jihyun Park | • **Data Engineer**<br>• Collected custom dataset and annotated via Roboflow<br>• Developed and managed data augmentation pipeline (v2–v7) |
-| Hyunhee Sim | • **AI Model Developer**<br>• Fine-tuned YOLO11n on the custom sidewalk dataset<br>• Optimized hyperparameters and tracked training logs |
+| **Yeji Kim** | • **Project Lead & Integration Developer**<br>• Integrated YOLO11n model inference with Streamlit real-time UI loop<br>• Managed GitHub branching strategy, repository structure, and collaboration workflow<br>• Oversee overall project schedule, milestones, and deliverables<br>• Conducted comprehensive model performance benchmarking and visualization (v2–v7) |
+| **Jihyun Park** | • **Data Engineer**<br>• • Collected and annotated a custom sidewalk dataset using Roboflow<br>• Managed dataset versioning (v2–v7), class refinement, and data augmentation<br>• Prepared augmented datasets for model training |
+| **Hyunhee Shim** | • **AI Model Developer**<br>• Fine-tuned YOLO11n on the custom sidewalk dataset<br>• Managed YOLO11n training workflows, checkpoints, and model artifacts |
 
 ---
 
 ## Acknowledgement
 
-This project uses [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) for object detection and [gTTS](https://github.com/pndurette/gTTS) for Korean TTS guidance.
+This project builds upon and utilizes the following incredible open-source libraries and platforms:
+
+* [Ultralytics YOLO](https://github.com/ultralytics/ultralytics) — Used for core real-time object detection and model inference.
+* [gTTS (Google Text-to-Speech)](https://github.com/pndurette/gTTS) — Used for generating Korean voice alerts and pedestrian guidance.
+* [Roboflow](https://universe.roboflow.com/s-workspace-1cqyr/oss-blind-walk-assistant/dataset/2) — Used for custom sidewalk dataset hosting, annotation, and multi-version data augmentation pipelines.
 
 ---
 
