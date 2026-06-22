@@ -124,7 +124,7 @@ Three input modes are supported:
 | Version | Precision | Recall | mAP50 | mAP50-95 |
 |---|---|---|---|---|
 | v2 (Baseline) | 0.695 | 0.441 | 0.514 | 0.348 |
-| v3 (Normalization) | 0.749 | 0.586 | 0.619 | 0.414 |
+| v3 (Normalization) | 0.749 | 0.556 | 0.619 | 0.414 |
 | v4 (+Flip) | 0.751 | 0.492 | 0.547 | 0.401 |
 | v5 (+Brightness) | 0.830 | 0.510 | 0.543 | 0.423 |
 | v6 (+Rotation) | 0.803 | 0.549 | 0.624 | 0.456 |
