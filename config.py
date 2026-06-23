@@ -46,4 +46,4 @@ CLASS_NAMES = [
     "utility_pole",
 ]
 
-HIGH_RISK_CLASSES = {"kickboard", "bicycle", "bollard", "braille_block", "damaged_sidewalk_block"}
+HIGH_RISK_CLASSES = {"kickboard", "bicycle", "car", "motorcycle"}
